@@ -1,0 +1,83 @@
+#include <bits/stdc++.h> 
+using namespace std;
+int main() {
+    int n; cin >> n;
+    string a;
+    int cows[n][3];
+    map<string, string> idk;
+    int cowsns = 0; int cowses = 0;
+    for (int i=0; i<n; i++){
+        for(int j=0; j<3; j++){
+            cin>>a;
+            if (j==0 && a=="E"){ cows[i][0] = 0; cowses++; }
+            else if(j==0 && a=="N"){ cows[i][0] = 1; cowsns++; }
+            else{ cows[i][j]= stoi(a); }  
+        }
+    }
+    int cowsn[cowsns][3];
+    int cowse[cowses][3];
+    int cowsni = 0; int cowsei = 0;
+    for (int i = 0; i < n; i++){
+        if(cows[i][0] == 0){ cowse[cowsei][0] = cows[i][0]; cowse[cowsei][1] = cows[i][1]; cowse[cowsei][2] = cows[i][2]; cowsei++;}
+        else{cowsn[cowsni][0] = cows[i][0]; cowsn[cowsni][1] = cows[i][1]; cowsn[cowsni][2] = cows[i][2]; cowsni++; }
+    }
+    qsort(cowsn, cowsns, sizeof(*cowsn),
+        [](const void *arg1, const void *arg2)->int
+        {
+            int const *lhs = static_cast<int const*>(arg1);
+            int const *rhs = static_cast<int const*>(arg2);
+            return (lhs[1] < rhs[1]) ? -1
+                :  ((rhs[1] < lhs[1]) ? 1
+                :  (lhs[1] < rhs[1] ? -1
+                :  ((rhs[1] < lhs[1] ? 1 : 0))));
+        });
+    qsort(cowse, cowses, sizeof(*cowse),
+        [](const void *arg1, const void *arg2)->int
+        {
+            int const *lhs = static_cast<int const*>(arg1);
+            int const *rhs = static_cast<int const*>(arg2);
+            return (lhs[2] < rhs[2]) ? -1
+                :  ((rhs[2] < lhs[2]) ? 1
+                :  (lhs[1] < rhs[1] ? -1
+                :  ((rhs[1] < lhs[1] ? 1 : 0))));
+        });
+    int min; bool nmark = false;
+    for (int i=0; i<cowsns; i++){
+        nmark = false;
+        for (int j=0; j<cowses; j++){
+            if (cowse[j][0] == 2){ continue; }
+            int edist = cowsn[i][1]-cowse[j][1];
+            int ndist = cowse[j][2]-cowsn[i][2];
+            if (ndist < 0 || edist < 0){ continue; }
+            else if (ndist == edist){ continue; }
+            else if (ndist < edist){
+                string pos = to_string(cowse[j][1]) + " " + to_string(cowse[j][2]);
+                cowse[j][0] = 2;
+                string dist = to_string(edist);
+                idk[pos] = dist;
+            }
+            else if (edist < ndist){
+                string pos = to_string(cowsn[i][1]) + " " + to_string(cowsn[i][2]);
+                string dist = to_string(ndist);
+                idk[pos] = dist;
+                nmark = true;
+                break;
+            }
+        }
+        if (not nmark){
+            string pos = to_string(cowsn[i][1]) + " " + to_string(cowsn[i][2]);
+            idk[pos] = "Infinity";
+        }
+    }
+    for (int i=0; i<cowses; i++){
+        if(cowse[i][0] !=2){
+            string pos = to_string(cowse[i][1]) + " " + to_string(cowse[i][2]);
+            idk[pos] = "Infinity";
+        }
+    }
+    for (int i=0; i<n; i++){
+        string pos = to_string(cows[i][1]) + " " + to_string(cows[i][2]);
+        cout <<idk[pos]<<endl;
+    }
+    return 0;
+}
