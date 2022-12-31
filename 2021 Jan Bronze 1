@@ -1,0 +1,19 @@
+#include <bits/stdc++.h> 
+using namespace std;
+int main(){
+    string word; string cowpha;
+    cin >> cowpha >> word;
+    map<char, int> sussyd;
+    for (int i=0; i<26; i++){
+        sussyd[cowpha[i]] = i;
+    }//hello dorai i know it's you btw 
+    int ans = 1; int prev = -1;
+    for (int i=0; i<word.length(); i++) {
+        if (sussyd[word[i]]<=prev){
+            ans++;
+        }
+        prev = sussyd[word[i]];
+    }
+    cout << ans;
+    return 0;
+}
