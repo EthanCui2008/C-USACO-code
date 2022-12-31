@@ -1,0 +1,33 @@
+#include <bits/stdc++.h> 
+using namespace std;
+int lessthan(long long arr[], int n, long long key){
+    long long left = 0; long long right = n;
+    long long mid;
+    while (left < right) {
+        mid = (right + left) >> 1;
+        if (arr[mid] == key) {
+            while (mid + 1 < n && arr[mid + 1] == key)
+                mid++;
+            break;
+        }
+        else if (arr[mid] > key)
+            right = mid;
+        else
+            left = mid + 1;
+    }
+    while (mid > -1 && arr[mid] > key)
+        mid--;
+    return mid + 1;
+}
+int main(){
+    int n; cin >> n;
+    long long cows[n]; for (int i=0; i<n; i++){ cin>>cows[i]; }
+    long long stalls[n]; for (int i=0; i<n; i++){ cin>>stalls[i]; }
+    sort(cows, cows+n); sort(stalls, stalls+n);
+    long long ans = 1;
+    for(int i = 0; i < n; i++){
+        ans*=(lessthan(cows,n,stalls[i])-i);
+    }
+    cout << ans;
+    return 0;
+}
