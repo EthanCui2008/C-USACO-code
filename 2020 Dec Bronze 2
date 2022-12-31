@@ -1,0 +1,25 @@
+#include <bits/stdc++.h> 
+using namespace std;
+int ans = 0;
+int main(){
+    int n; cin >> n;
+    int sdorai[n+1]; sdorai[0] = 0; int sum = 0;
+    int arr[n]; for(int i = 0; i < n; i++){ cin >> arr[i]; sum+=arr[i]; sdorai[i+1] = sum; }
+    sort(arr, arr+n);
+    float avg;
+    for(int i = 0; i<n; i++){
+        for(int j = 1; j<=n-i; j++){
+            if ((sdorai[i+j]-sdorai[i])%j == 0){ 
+                avg = (sdorai[i+j]-sdorai[i])/j;
+                for(int k = i; k < i+j; k++){
+                    if (arr[k] == avg){
+                        ans++;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    cout << ans;
+    return 0;
+}
